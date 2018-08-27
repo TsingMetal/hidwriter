@@ -1,0 +1,5 @@
+# for windows
+pywinusb
+
+# for linux
+pyusb

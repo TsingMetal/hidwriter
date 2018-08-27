@@ -4,65 +4,37 @@ import usb
 class HIDWriter(object):
 
     def __init__(self, vid=0x0483, pid=0x5750):
-        self.handle = None
-        self.vid = vid
-        self.pid = pid
 
-    def start(self):
-        self.dev = usb.core.find(idVendor=self.vid, idProduct=self.pid)
+        self.dev = usb.core.find(idVendor=vid, idProduct=pid)
         if self.dev != None:
             self.ep_in = self.dev[0][(0, 0)][0].bEndpointAddress
             self.ep_out = self.dev[0][(0, 0)][1].bEndpointAddress
             self.size = self.dev[0][(0, 0)][1].wMaxPacketSize
-        self.open()
     
-    def open(self):
-        '''
-        打开usb设备
-        '''
-        busses = usb.busses()
-        for bus in busses:
-            devices = bus.devices
-            for device in devices:
-                if device.idVendor == self.vid and device.idProduct == self.pid:
-                    self.handle = device.open()
-
-    def read(self, timeout=0):
+    def read(self):
         '''
         读取usb设备发过来的数据
         '''
-        if self.handle:
-            data = self.handle.interruptRead(self.ep_in, timeout)
-
+        data = dev.read(self.ep_in, 64, timeout=5000)
         try:
             data_list = data.tolist()
+            print(data_list)
             return data_list
         except:
-            return list()
+            print("read data failed!")
     
-    def write(self, send_list, timeout=1000):
+    def write(self, send_list):
         '''
         发送数据给usb设备
         '''
-        if self.handle:
-            bytes_num = self.handle.interruptWrite(
-                self.ep_out, send_list, timeout)
-            return bytes_num
+        bytes_num = self.dev.write(self.ep_out, send_list, timeout=5000)
+        print(bytes_num)
+        return bytes_num
         
-    def stop(self):
-        '''
-        停止，关闭usb设备，释放接口
-        '''
-        self.alive = False
-        if self.handle:
-            self.handle.releaseInterface()
-
 
 if __name__ == '__main__':
     import time
-    dev = usbHelper()
-
-    dev.start()
+    dev = HIDWriter()
 
     send_list = [0xAA for i in range(64)]
     dev.write(send_list)
