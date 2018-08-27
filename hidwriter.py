@@ -1,5 +1,22 @@
+import platform
+
+
 class HIDWriter(object):
 
-    def __init__(self, vid=0x0483, pid=0x5750):
-        self.vid = vid
-        self.pid = pid
+    def __init__(self):
+        if 'Windows' in platform.platform():
+            from winhidwriter import HIDWriter as writer
+        else: # for linux platform
+            from linuxhidwriter import HIDWriter as writer
+
+        self.writer = writer()
+
+
+    def read(self):
+        self.writer.read()
+
+    def write(self, raw_data):
+        self.writer.write(raw_data)
+
+    def close(self):
+        self.close()

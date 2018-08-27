@@ -6,9 +6,12 @@ class HIDWriter(object):
     def __init__(self, vid=0x0483, pid=0x5750):
         _filter = hid.HidDeviceFilter(vendor_id=vid, product_id=pid)
         devs = _filter.get_devices()
-        self.dev = devs[0]
-        self.dev.open()
-        self.reports = self.dev.find_output_reports()
+        if len(devs) > 0:
+            self.dev = devs[0]
+            self.dev.open()
+            self.reports = self.dev.find_output_reports()
+        else:
+            print("No HID devices found")
 
     def read(self):
         def handle_raw_data(data):

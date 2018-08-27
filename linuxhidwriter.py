@@ -9,12 +9,10 @@ class HIDWriter(object):
         if self.dev != None:
             self.ep_in = self.dev[0][(0, 0)][0].bEndpointAddress
             self.ep_out = self.dev[0][(0, 0)][1].bEndpointAddress
-            self.size = self.dev[0][(0, 0)][1].wMaxPacketSize
+        else:
+            print("the HID devices is not found")
     
     def read(self):
-        '''
-        读取usb设备发过来的数据
-        '''
         data = dev.read(self.ep_in, 64, timeout=5000)
         try:
             data_list = data.tolist()
@@ -24,12 +22,13 @@ class HIDWriter(object):
             print("read data failed!")
     
     def write(self, send_list):
-        '''
-        发送数据给usb设备
-        '''
         bytes_num = self.dev.write(self.ep_out, send_list, timeout=5000)
         print(bytes_num)
         return bytes_num
+
+    def close(self):
+        ''' not implemented '''
+        pass
         
 
 if __name__ == '__main__':
