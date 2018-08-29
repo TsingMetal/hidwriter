@@ -1,12 +1,12 @@
 import time
 
-from cmd_data import counter_cmd
+from cmd_data import COUNTER_CMD
 
 from hidwriter import HIDWriter
 
 
 if __name__ == '__main__':
-    raw_data = counter_cmd
+    raw_data = COUNTER_CMD
 
     writer = HIDWriter()
     writer.read()
