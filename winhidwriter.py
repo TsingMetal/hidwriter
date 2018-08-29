@@ -14,18 +14,36 @@ class HIDWriter(object):
             print("No HID devices found")
 
     def read(self):
-        def handle_raw_data(data):
-            print([hex(i).upper() for i in data[1:]])
-        self.dev.set_raw_data_handler(handle_raw_data)
+        '''
+        read the input from HID device
+        '''
+        self.dev.set_raw_data_handler(self._handle_raw_data)
 
     def write(self, send_list):
         self.reports[0].set_raw_data(send_list)
-        bytes_num = self.reports[0].send() 
-        print(bytes_num)
-        return bytes_num
+        result = self.reports[0].send() 
+        if result:
+            print('write OK')
+        else:
+            print('write FAIL')
 
     def close(self):
         self.dev.close()
+
+    def _handle_raw_data(self, data):
+        count = ''.join([str(i) for i in data[1:5]])
+        fixture_id = ''.join([str(i) for i in data[5:35]])
+        maintenance_time = ''.join([str(i) for i in data[35:43]])
+        maintenance_count = ''.join([str(i) for i in data[43:47]])
+        count_limit = ''.join([str(i) for i in data[47:51]])
+        save_str = '''
+Count=%s\nFixture_ID=%s\nMaintenance_time=%s\n\
+Maintenance_count=%s\nCount_limit=%s
+        ''' \
+        % (count, fixture_id, maintenance_time, maintenance_count, count_limit)
+        print(save_str)            
+        return save_str
+
 
 
 if __name__ == '__main__':

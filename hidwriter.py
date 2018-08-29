@@ -19,4 +19,4 @@ class HIDWriter(object):
         self.writer.write(raw_data)
 
     def close(self):
-        self.close()
+        self.writer.close()
