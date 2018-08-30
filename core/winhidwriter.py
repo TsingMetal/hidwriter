@@ -30,7 +30,7 @@ class HIDWriter(object):
             if self.count_limit != None:
                 break
 
-        return self.save_str
+        return self.basc_data
 
     def write(self, send_list):
         self.reports[0].set_raw_data(send_list)
@@ -46,7 +46,7 @@ class HIDWriter(object):
         self.maintenance_time = ''.join([str(i) for i in data[35:43]])
         self.maintenance_count = ''.join([str(i) for i in data[43:47]])
         self.count_limit = ''.join([str(i) for i in data[47:51]])
-        self.save_str = '''
+        self.basc_data = '''
 Count=%d\nFixture_ID=%s\nMaintenance_time=%s\n\
 Maintenance_count=%s\nCount_limit=%s
         ''' \
