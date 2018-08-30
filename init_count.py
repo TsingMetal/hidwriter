@@ -6,28 +6,36 @@ from util.cmd_data import INIT_COUNT_CMD
 from util.utils import str_to_int_list, verify_arg
 from core.hidwriter import HIDWriter
 
-def main():
-    raw_data = INIT_COUNT_CMD
+def main(
+        cmd='cmd',
+        raw_data=None, max_len=8,
+        isnum=True
+    ):
     writer = HIDWriter()
 
-    arg = sys.argv[1]
-    verify_arg(
-            arg, max_len=5, 
-            cmd=os.path.basename(__file__), 
-            isnum=True
-    )
+    arg = \
+        verify_arg(
+                max_len=max_len//2, 
+                cmd=cmd, 
+                isnum=isnum
+        )
 
     # convert the arg to a list of integers 
-    arg_list = str_to_int_list(arg, length=8)
+    arg_list = str_to_int_list(arg, length=max_len)
         
-    raw_data[3:7] = arg_list
+    raw_data[3: (max_len // 2) + 3] = arg_list
+    print(raw_data) # fordebug
 
     result = writer.write(raw_data)
     if result:
         print('write OK')
-    time.sleep(0.5)
+        time.sleep(0.5)
+    else:
+        print('FAILED')
+
     writer.close()
 
 
 if __name__ == '__main__':
-    main()
+    cmd = os.path.basename(__file__)
+    main(cmd, INIT_COUNT_CMD, 12, True)

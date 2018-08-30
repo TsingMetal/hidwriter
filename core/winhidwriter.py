@@ -41,9 +41,11 @@ class HIDWriter(object):
         self.dev.close()
 
     def _handle_raw_data(self, data):
+        print(data[1:]) # fordebug
+        print(data[35: 43]) # fordebug
         self.count = int_list_to_int(data[1:5]) # index 0 ignored
         self.fixture_id = ''.join([str(i) for i in data[5:35]])
-        self.maintenance_time = ''.join([str(i) for i in data[35:43]])
+        self.maintenance_time = int_list_to_int(data[35:39])
         self.maintenance_count = ''.join([str(i) for i in data[43:47]])
         self.count_limit = ''.join([str(i) for i in data[47:51]])
         self.basc_data = '''
