@@ -13,10 +13,10 @@ class HIDWriter(object):
 
 
     def read(self):
-        self.writer.read()
+        return self.writer.read()
 
     def write(self, raw_data):
-        self.writer.write(raw_data)
+        return self.writer.write(raw_data)
 
     def close(self):
         self.writer.close()

@@ -1,3 +1,5 @@
+import time
+
 import pywinusb.hid as hid
 
 from util.utils import int_list_to_int
@@ -7,6 +9,7 @@ from util.cmd_data import COUNTER_CMD
 class HIDWriter(object):
 
     def __init__(self, vid=0x0483, pid=0x5750):
+
         _filter = hid.HidDeviceFilter(vendor_id=vid, product_id=pid)
         devs = _filter.get_devices()
         if len(devs) > 0:
@@ -15,27 +18,23 @@ class HIDWriter(object):
             self.reports = self.dev.find_output_reports()
         else:
             print("No HID devices found")
-            return
-
-        # init datas here
-        self.dev.set_raw_data_handler(self._handle_raw_data)
-        self.write(COUNTER_CMD)
 
     def read(self):
         '''
         read the input from HID device
         '''
-        pass
+        self.dev.set_raw_data_handler(self._handle_raw_data)
+        self.write(COUNTER_CMD)
+        self.count_limit = None 
+        while True: # wait variants to be inited
+            if self.count_limit != None:
+                break
+
+        return self.save_str
 
     def write(self, send_list):
         self.reports[0].set_raw_data(send_list)
         result = self.reports[0].send() 
-        '''
-        if result:
-            print('write OK')
-        else:
-            print('write FAIL')
-        '''
         return result
 
     def close(self):
@@ -53,13 +52,11 @@ Maintenance_count=%s\nCount_limit=%s
         ''' \
         % (self.count, self.fixture_id, self.maintenance_time,
                 self.maintenance_count, self.count_limit)
-        print(self.save_str)            
-        return self.save_str
 
 
 
 if __name__ == '__main__':
     writer = HIDWriter()
     writer.read()
-    raw_data = [0x00 for i in range(64)]
+    raw_data = [0, 1, 1] + [0] * 64
     writer.write(raw_data)
