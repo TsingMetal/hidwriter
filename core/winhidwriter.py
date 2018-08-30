@@ -1,3 +1,4 @@
+import sys
 import time
 
 import pywinusb.hid as hid
@@ -18,6 +19,7 @@ class HIDWriter(object):
             self.reports = self.dev.find_output_reports()
         else:
             print("No HID devices found")
+            sys.exit(-1)
 
     def read(self):
         '''
