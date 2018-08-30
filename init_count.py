@@ -1,7 +1,7 @@
 import sys
 
-from cmd_data import INIT_COUNT_CMD
-from hidwriter import HIDWriter
+from util.cmd_data import INIT_COUNT_CMD
+from core.hidwriter import HIDWriter
 
 def main():
     help_str = '''

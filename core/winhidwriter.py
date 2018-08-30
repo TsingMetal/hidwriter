@@ -1,7 +1,7 @@
 import pywinusb.hid as hid
 
-from util import int_list_to_int
-from cmd_data import COUNTER_CMD
+from util.utils import int_list_to_int
+from util.cmd_data import COUNTER_CMD
 
 
 class HIDWriter(object):
@@ -53,8 +53,8 @@ Maintenance_count=%s\nCount_limit=%s
         ''' \
         % (self.count, self.fixture_id, self.maintenance_time,
                 self.maintenance_count, self.count_limit)
-        print(save_str)            
-        return save_str
+        print(self.save_str)            
+        return self.save_str
 
 
 

@@ -5,9 +5,9 @@ class HIDWriter(object):
 
     def __init__(self):
         if 'Windows' in platform.platform():
-            from winhidwriter import HIDWriter as writer
+            from core.winhidwriter import HIDWriter as writer
         else: # for linux platform
-            from linuxhidwriter import HIDWriter as writer
+            from core.linuxhidwriter import HIDWriter as writer
 
         self.writer = writer()
 
