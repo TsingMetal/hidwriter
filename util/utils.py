@@ -1,3 +1,6 @@
+import sys
+
+
 def int_list_to_int(int_list):
     ''' 
     convert a integer list to a hex string list,
@@ -24,6 +27,23 @@ def str_to_int_list(_str, length=8):
     int_list = [int(i, 16) for i in hex_str_list]
 
     return int_list
+
+
+def verify_arg(
+        arg, max_len=5, cmd='command', isnum=True
+    ):
+
+    help_str = '''
+Usage:python %s <param>
+e.g.: python %s %s''' 
+    help_str = help_str % (cmd, cmd, '8' * max_len)
+    
+    if len(sys.argv) != 2 or \
+            len(arg) > max_len \
+            or (arg.isdigit() != isnum):
+        print("FAIL! Proper parameter needed")
+        print(help_str)
+        sys.exit(-1)
 
 
 if __name__ == '__main__':
