@@ -1,3 +1,4 @@
+'''
 import os.path
 import sys
 import time
@@ -39,3 +40,10 @@ def main(
 if __name__ == '__main__':
     cmd = os.path.basename(__file__)
     main(cmd, INIT_COUNT_CMD, 12, True)
+'''
+
+from core.hidwriter import main
+
+from util.cmd_data import INIT_COUNT_CMD
+
+main('cmd', INIT_COUNT_CMD, 8, True)
