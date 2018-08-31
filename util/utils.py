@@ -41,7 +41,8 @@ def verify_arg(
 
     help_str = '''
 Usage:python %s <param>
-e.g.: python %s %s''' 
+e.g.: python %s %s
+    ''' 
     help_str = help_str % (cmd, cmd, '8' * max_len)
 
     if len(sys.argv) != 2 or \

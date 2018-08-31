@@ -2,7 +2,7 @@ import os.path
 
 from util.cmd_data import INIT_FIXTURE_ID_CMD
 
-from init_count import main
+from core.hidwriter import main
 
 
 if __name__ == '__main__':
