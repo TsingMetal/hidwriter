@@ -16,14 +16,15 @@ class HIDWriter(object):
             self.ep_out = self.dev[0][(0, 0)][1].bEndpointAddress
 
             if self.dev.is_kernel_driver_active(0):
-                self.dev.detach_kernal_driver(0)
+                self.dev.detach_kernel_driver(0)
         else:
             print("the HID devices is not found")
             sys.exit(-1)
     
     def read(self):
-        self.write(self.ep_out, COUNTER_CMD[1:], timeout=3000)
-        data = dev.read(self.ep_in, 64, timeout=3000)
+        self.write(COUNTER_CMD[1:])
+        print(COUNTER_CMD[1:]) # fordebug
+        data = self.dev.read(self.ep_in, 64, timeout=3000)
         try:
             data_list = data.tolist()
             basc_data = self._handle_raw_data(data_list)
@@ -32,6 +33,7 @@ class HIDWriter(object):
             print("read data failed!")
     
     def write(self, send_list):
+        # self.dev.reset()
         bytes_num = self.dev.write(self.ep_out, send_list, timeout=5000)
         return bytes_num
 
@@ -57,8 +59,6 @@ Maintenance_count=%s\nCount_limit=%s
         return self.basc_data
 
 
-        
-
 if __name__ == '__main__':
     import time
     dev = HIDWriter()
@@ -69,7 +69,6 @@ if __name__ == '__main__':
     while True:
         try:
             mylist = dev.read()
-            print mylist
             if mylist:
                 break
         except:
