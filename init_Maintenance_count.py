@@ -6,5 +6,10 @@ from core.hidwriter import main
 
 
 if __name__ == '__main__':
-    cmd = os.path.basename(__file__)
-    main(cmd, INIT_MAINTENANCE_COUNT_CMD, 8, True) 
+    main(
+        cmd=os.path.basename(__file__),
+        send_list=INIT_MAINTENANCE_COUNT_CMD,
+        max_len=6,
+        hex_len=8,          # the length of hex string
+        isnum=True
+    )

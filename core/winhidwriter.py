@@ -3,7 +3,7 @@ import time
 
 import pywinusb.hid as hid
 
-from util.utils import int_list_to_int
+from util.utils import int_list_to_int_str, int_list_to_hex_str
 from util.cmd_data import COUNTER_CMD
 from util.utils import str_to_int_list, verify_arg
 
@@ -46,11 +46,11 @@ class HIDWriter(object):
     def _handle_raw_data(self, data):
         print(data[1:]) # fordebug
         print(data[35: 43]) # fordebug
-        self.count = int_list_to_int(data[1:5]) # index 0 ignored
-        self.fixture_id = ''.join([str(i) for i in data[5:35]])
-        self.maintenance_time = int_list_to_int(data[35:39])
-        self.maintenance_count = ''.join([str(i) for i in data[43:47]])
-        self.count_limit = ''.join([str(i) for i in data[47:51]])
+        self.count = int_list_to_int_str(data[1:5]) # index 0 ignored
+        self.fixture_id = int_list_to_hex_str(data[5:35])
+        self.maintenance_time = int_list_to_int_str(data[35:39])
+        self.maintenance_count = int_list_to_int_str(data[43:47])
+        self.count_limit = int_list_to_int_str(data[47:51])
         self.basc_data = '''
 Count=%d\nFixture_ID=%s\nMaintenance_time=%s\n\
 Maintenance_count=%s\nCount_limit=%s
@@ -61,7 +61,7 @@ Maintenance_count=%s\nCount_limit=%s
 
 def main(
         cmd='cmd',
-        raw_data=None, max_len=8,
+        send_list=None, max_len=8,
         isnum=True
     ):
     writer = HIDWriter()
@@ -76,10 +76,10 @@ def main(
     # convert the arg to a list of integers 
     arg_list = str_to_int_list(arg, length=max_len)
         
-    raw_data[3: (max_len // 2) + 3] = arg_list
-    print('win raw_data:\n', raw_data) # fordebug
+    send_list[3: (max_len // 2) + 3] = arg_list
+    print('win send_list:\n', send_list) # fordebug
 
-    result = writer.write(raw_data)
+    result = writer.write(send_list)
     if result:
         print('write OK')
         time.sleep(0.5)

@@ -1,32 +1,36 @@
 import sys
 
 
-def int_list_to_int(int_list):
+def int_list_to_int_str(int_list):
     ''' 
     convert a integer list to a hex string list,
-    then convert the hex string list to a integer    
+    then convert the hex string list to a int string    
     '''
     # int list to hex string list
     hex_str_list = [hex(i)[2:].zfill(2) for i in int_list]
     # cancat the hex_str_list into a string
     _str = ''.join(hex_str_list)
 
-    return int(_str, 16)
+    return str(int(_str, 16))
 
+def int_list_to_hex_str(int_list):
+    hex_str = [hex(i)[2:].zfill(2) for i in int_list]
+    return ''.join(hex_str)
 
-def str_to_int_list(_str, length=8):
+def str_to_int_list(_str, hex_len=8):
     ''' convert a string(user input) to a int_list '''
 
     if _str.isdigit():
         _int = int(_str)
         # left padded with 0 to the required length
-        hex_str = hex(_int)[2:].zfill(length)
+        hex_str = hex(_int)[2:].zfill(hex_len)
         print(hex_str) # fordebug
     else:
-        hex_str = _str + '0' * (length - len(_str))
+        hex_str = _str + '0' * (hex_len - len(_str))
+        print(hex_str)
 
     # each sub group contains 2 character
-    hex_str_list = [hex_str[i: i+2] for i in range(0, length, 2)]
+    hex_str_list = [hex_str[i: i+2] for i in range(0, hex_len, 2)]
     print(hex_str_list) # fordebug
 
     int_list = [int(i, 16) for i in hex_str_list]
@@ -36,7 +40,7 @@ def str_to_int_list(_str, length=8):
 
 
 def verify_arg(
-        max_len=5, cmd='command', isnum=True
+        max_len=6, cmd='command', isnum=True
     ):
 
     help_str = '''
@@ -56,9 +60,9 @@ e.g.: python %s %s
 
 
 if __name__ == '__main__':
-    # simle test:
+    # simle tests:
 
-    assert int_list_to_int([0, 0, 39, 15]) == 9999
+    assert int_list_to_int_str([0, 0, 39, 15]) == 9999
 
     assert str_to_int_list('9999', length=8) == [0, 0, 39, 15]
 
