@@ -4,6 +4,7 @@ import usb
 
 from util.cmd_data import COUNTER_CMD
 from util.utils import int_list_to_int
+from util.utils import str_to_int_list, verify_arg
 
 
 class HIDWriter(object):
@@ -57,22 +58,38 @@ Maintenance_count=%s\nCount_limit=%s
         return self.basc_data
 
 
+def main(
+        cmd='cmd',
+        raw_data=None, max_len=8,
+        isnum=True
+    ):
+    writer = HIDWriter()
+
+    arg = \
+        verify_arg(
+                max_len=max_len//2, 
+                cmd=cmd, 
+                isnum=isnum
+        )
+
+    # convert the arg to a list of integers 
+    arg_list = str_to_int_list(arg, length=max_len)
         
+    raw_data = raw_data[1:] # different from Windows
+    raw_data[2: (max_len // 2) + 2] = arg_list
+    print('linux raw_data:\n',raw_data) # fordebug
+
+    result = writer.write(raw_data)
+    if result:
+        print('write OK')
+    else:
+        print('FAILED')
+
+    writer.close()
+
 
 if __name__ == '__main__':
-    import time
-    dev = HIDWriter()
-
-    send_list = [0x01, 0x01] + [0x00] * 62
-    dev.write(send_list)
-    # time.sleep(0.25)
-    while True:
-        try:
-            mylist = dev.read()
-            print mylist
-            if mylist:
-                break
-        except:
-            dev.stop()
-            break
-    dev.stop()
+    import os.path
+    from util.cmd_data import INIT_COUNT_CMD
+    cmd = os.path.basename(__file__)
+    main(cmd, INIT_COUNT_CMD, 8, True)

@@ -5,6 +5,7 @@ import pywinusb.hid as hid
 
 from util.utils import int_list_to_int
 from util.cmd_data import COUNTER_CMD
+from util.utils import str_to_int_list, verify_arg
 
 
 class HIDWriter(object):
@@ -58,9 +59,38 @@ Maintenance_count=%s\nCount_limit=%s
                 self.maintenance_count, self.count_limit)
 
 
+def main(
+        cmd='cmd',
+        raw_data=None, max_len=8,
+        isnum=True
+    ):
+    writer = HIDWriter()
+
+    arg = \
+        verify_arg(
+                max_len=max_len//2, 
+                cmd=cmd, 
+                isnum=isnum
+        )
+
+    # convert the arg to a list of integers 
+    arg_list = str_to_int_list(arg, length=max_len)
+        
+    raw_data[3: (max_len // 2) + 3] = arg_list
+    print('win raw_data:\n', raw_data) # fordebug
+
+    result = writer.write(raw_data)
+    if result:
+        print('write OK')
+        time.sleep(0.5)
+    else:
+        print('FAILED')
+
+    writer.close()
+
 
 if __name__ == '__main__':
-    writer = HIDWriter()
-    writer.read()
-    raw_data = [0, 1, 1] + [0] * 64
-    writer.write(raw_data)
+    import os.path
+    from util.cmd_data import INIT_COUNT_CMD
+    cmd = os.path.basename(__file__)
+    main(cmd, INIT_COUNT_CMD, 8, True)

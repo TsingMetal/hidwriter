@@ -1,6 +1,7 @@
 import platform
 
 
+'''
 class HIDWriter(object):
 
     def __init__(self):
@@ -20,3 +21,9 @@ class HIDWriter(object):
 
     def close(self):
         self.writer.close()
+'''
+
+if platform.system() == 'Windows':
+    from core.winhidwriter import main
+else:
+    from core.linuxhidwriter import main
