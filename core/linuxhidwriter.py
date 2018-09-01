@@ -71,7 +71,6 @@ def main(
         hex_len=8,          # the length of hex string
         isnum=True          # whether only numeric allowed
     ):
-    writer = HIDWriter()
 
     arg = \
         verify_arg(
@@ -79,6 +78,10 @@ def main(
                 cmd=cmd, 
                 isnum=isnum
         )
+    if arg == None:
+        return
+
+    writer = HIDWriter()
 
     # convert the arg to a list of integers 
     arg_list = str_to_int_list(arg, hex_len=hex_len)

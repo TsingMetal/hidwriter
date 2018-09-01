@@ -28,10 +28,15 @@ class HIDWriter(object):
         '''
         self.dev.set_raw_data_handler(self._handle_raw_data)
         self.write(COUNTER_CMD)
-        self.count_limit = None 
-        while True: # wait variants to be inited
-            if self.count_limit != None:
+        # write twice to get the valid result(there is a 
+        # bug in the usb device)
+        self.write(COUNTER_CMD)
+        self.basc_data = None 
+        
+        for i in range(5): # wait variants to be inited
+            if self.basc_data != None:
                 break
+            time.sleep(0.1)
 
         return self.basc_data
 
@@ -44,15 +49,13 @@ class HIDWriter(object):
         self.dev.close()
 
     def _handle_raw_data(self, data):
-        print(data[1:]) # fordebug
-        print(data[35: 43]) # fordebug
         self.count = int_list_to_int_str(data[1:5]) # index 0 ignored
-        self.fixture_id = int_list_to_hex_str(data[5:35])
-        self.maintenance_time = int_list_to_int_str(data[35:39])
+        self.fixture_id = int_list_to_hex_str(data[5:20])
+        self.maintenance_time = int_list_to_int_str(data[35:43])
         self.maintenance_count = int_list_to_int_str(data[43:47])
         self.count_limit = int_list_to_int_str(data[47:51])
         self.basc_data = '''
-Count=%d\nFixture_ID=%s\nMaintenance_time=%s\n\
+Count=%s\nFixture_ID=%s\nMaintenance_time=%s\n\
 Maintenance_count=%s\nCount_limit=%s
         ''' \
         % (self.count, self.fixture_id, self.maintenance_time,
@@ -60,23 +63,28 @@ Maintenance_count=%s\nCount_limit=%s
 
 
 def main(
-        cmd='cmd',
-        send_list=None, max_len=8,
-        isnum=True
+        cmd='cmd',          # commands, i.e. file name
+        send_list=None,      # data sent to hid device 
+        max_len=6,          # max length of argument allowed
+        hex_len=8,          # the length of hex string
+        isnum=True          # whether only numeric allowed
     ):
-    writer = HIDWriter()
 
     arg = \
         verify_arg(
-                max_len=max_len//2, 
-                cmd=cmd, 
+                max_len=max_len,
+                cmd=cmd,
                 isnum=isnum
         )
+    if arg == None:
+        return
 
-    # convert the arg to a list of integers 
-    arg_list = str_to_int_list(arg, length=max_len)
+    writer = HIDWriter()
+
+    # convert the arg to a list of integers
+    arg_list = str_to_int_list(arg, hex_len=hex_len)
         
-    send_list[3: (max_len // 2) + 3] = arg_list
+    send_list[3: len(arg_list)+3] = arg_list
     print('win send_list:\n', send_list) # fordebug
 
     result = writer.write(send_list)

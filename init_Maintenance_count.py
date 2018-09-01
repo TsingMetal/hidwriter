@@ -1,4 +1,5 @@
 import os.path
+import sys
 
 from util.cmd_data import INIT_MAINTENANCE_COUNT_CMD
 
