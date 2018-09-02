@@ -13,29 +13,28 @@ def int_list_to_int_str(int_list):
 
     return str(int(_str, 16))
 
-def int_list_to_hex_str(int_list):
-    hex_str = [hex(i)[2:].zfill(2) for i in int_list]
-    return ''.join(hex_str)
+def int_list_to_str(int_list):
+    '''
+    convert a list of ascii codes to a string
+    '''
+    str_list = [chr(i) for i in int_list]
+    _str = ''.join(str_list)
+    return _str
 
 def str_to_int_list(_str, hex_len=8):
     ''' convert a string(user input) to a int_list '''
 
-    if _str.isdigit() and len(_str) <= 8:
+    if _str.isdigit() and len(_str) < 8:
         _int = int(_str)
         # left padded with 0 to the required length
         hex_str = hex(_int)[2:].zfill(hex_len)
+        # each sub group contains 2 character
+        hex_str_list = [hex_str[i: i+2] for i in range(0, hex_len, 2)]
+        int_list = [int(i, 16) for i in hex_str_list]
     else:
-        hex_str = _str
-        hex_len = len(_str)
+        int_list = [ord(i) for i in _str]
 
-    print('convert to hex:') # fordebug
-    print(hex_str) # fordebug
-
-    # each sub group contains 2 character
-    hex_str_list = [hex_str[i: i+2] for i in range(0, hex_len, 2)]
-
-    int_list = [int(i, 16) for i in hex_str_list]
-    print('convert to int list:')  # for debug
+    print('convert to int list:\n')  # for debug
     print(int_list) # for debug
 
     return int_list

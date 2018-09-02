@@ -3,7 +3,7 @@ import time
 
 import pywinusb.hid as hid
 
-from util.utils import int_list_to_int_str, int_list_to_hex_str
+from util.utils import int_list_to_int_str, int_list_to_str
 from util.cmd_data import COUNTER_CMD
 from util.utils import str_to_int_list, verify_arg
 
@@ -50,8 +50,8 @@ class HIDWriter(object):
 
     def _handle_raw_data(self, data):
         self.count = int_list_to_int_str(data[1:5]) # index 0 ignored
-        self.fixture_id = int_list_to_hex_str(data[5:20])
-        self.maintenance_time = int_list_to_int_str(data[35:43])
+        self.fixture_id = int_list_to_str(data[5:20])
+        self.maintenance_time = int_list_to_str(data[35:43])
         self.maintenance_count = int_list_to_int_str(data[43:47])
         self.count_limit = int_list_to_int_str(data[47:51])
         self.basc_data = '''
