@@ -8,7 +8,7 @@ def int_list_to_int_str(int_list):
     '''
     # int list to hex string list
     hex_str_list = [hex(i)[2:].zfill(2) for i in int_list]
-    # cancat the hex_str_list into a string
+    # concat the hex_str_list into a string
     _str = ''.join(hex_str_list)
 
     return str(int(_str, 16))
@@ -24,17 +24,18 @@ def str_to_int_list(_str, hex_len=8):
         _int = int(_str)
         # left padded with 0 to the required length
         hex_str = hex(_int)[2:].zfill(hex_len)
-        print(hex_str) # fordebug
     else:
         hex_str = _str
         hex_len = len(_str)
-        print(hex_str)
+
+    print('convert to hex:') # fordebug
+    print(hex_str) # fordebug
 
     # each sub group contains 2 character
     hex_str_list = [hex_str[i: i+2] for i in range(0, hex_len, 2)]
-    print(hex_str_list) # fordebug
 
     int_list = [int(i, 16) for i in hex_str_list]
+    print('convert to int list:')  # for debug
     print(int_list) # for debug
 
     return int_list
@@ -77,5 +78,5 @@ if __name__ == '__main__':
 
     expected = [int('ab', 16), int('cd', 16), 
             int('ef', 16), int('ff',16)] + [0] * 26
-    res = str_to_int_list('abcdefff', length=60)
+    res = str_to_int_list('abcdefff', hex_len=60)
     assert res == expected
