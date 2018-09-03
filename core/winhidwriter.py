@@ -19,7 +19,7 @@ class HIDWriter(object):
             self.dev.open()
             self.reports = self.dev.find_output_reports()
         else:
-            print("No HID devices found")
+            print('Counter not FOUND!')
             sys.exit(-1)
 
     def read(self):
@@ -79,13 +79,10 @@ def main(
     if arg == None:
         return
 
-    writer = HIDWriter()
-
     # convert the arg to a list of integers
     arg_list = str_to_int_list(arg, hex_len=hex_len)
         
     send_list[3: len(arg_list)+3] = arg_list
-    print('win send_list:\n', send_list) # fordebug
 
     result = writer.write(send_list)
     if result:

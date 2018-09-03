@@ -19,16 +19,16 @@ class HIDWriter(object):
             if self.dev.is_kernel_driver_active(0):
                 self.dev.detach_kernel_driver(0)
         else:
-            print("the HID devices is not found")
+            print('Counter not found')
             sys.exit(-1)
-    
-    def read(self):
+
         # 'unread' the invalid data
-        self.write(COUNTER_CMD[1:])
+        self.dev.write(self.ep_out, COUNTER_CMD[1:], timeout=5000)
         self.dev.read(self.ep_in, 64, timeout=3000)
 
-        self.write(COUNTER_CMD[1:])
-        print(COUNTER_CMD[1:]) # fordebug
+    def read(self):
+
+        self.dev.write(self.ep_out, COUNTER_CMD[1:], timeout=5000)
         data = self.dev.read(self.ep_in, 64, timeout=3000)
         try:
             data_list = data.tolist()
@@ -38,8 +38,8 @@ class HIDWriter(object):
             print("read data failed!")
     
     def write(self, send_list):
-        # self.dev.reset()
         bytes_num = self.dev.write(self.ep_out, send_list, timeout=5000)
+        self.dev.read(self.ep_in, 64, timeout=3000)
         return bytes_num
 
     def close(self):
@@ -47,8 +47,6 @@ class HIDWriter(object):
         pass
 
     def _handle_raw_data(self, data):
-        print(data[:]) # fordebug
-        print(data[34: 42]) # fordebug
         self.count = int_list_to_int_str(data[0:4]) # index 0 ignored
         self.fixture_id = int_list_to_str(data[4:34])
         self.maintenance_time = int_list_to_str(data[34:38])
@@ -66,7 +64,7 @@ Maintenance_count=%s\nCount_limit=%s
 
 def main(
         cmd='cmd',          # commands, i.e. file name
-        send_list=None,      # data sent to hid device
+        send_list=None,     # data sent to hid device
         max_len=6,          # max length of argument allowed
         hex_len=8,          # the length of hex string
         isnum=True          # whether only numeric allowed

@@ -34,9 +34,6 @@ def str_to_int_list(_str, hex_len=8):
     else:
         int_list = [ord(i) for i in _str]
 
-    print('convert to int list:\n')  # for debug
-    print(int_list) # for debug
-
     return int_list
 
 
