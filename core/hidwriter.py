@@ -25,7 +25,6 @@ def write(
         cmd='cmd',          # commands, i.e. file name
         send_list=None,     # data sent to hid device
         max_len=6,          # max length of argument allowed
-        hex_len=8,          # the length of hex string
         isnum=True          # whether only numeric allowed
     ):
 
@@ -46,10 +45,11 @@ def write(
 
     print('writing...')
     # convert the arg to a list of integers
-    arg_list = str_to_int_list(arg, hex_len=hex_len)
+    arg_list = str_to_int_list(
+            arg, isnum=isnum)
 
     # argument starts from index 2
-    send_list[3: (hex_len // 2) + 3] = arg_list
+    send_list[3: len(arg_list) + 3] = arg_list
 
     if 'Linux' in platform.platform():
         send_list = send_list[1:]

@@ -24,15 +24,15 @@ def int_list_to_str(int_list):
     _str = ''.join(str_list)
     return _str
 
-def str_to_int_list(_str, hex_len=8):
+def str_to_int_list(_str, isnum=True):
     ''' convert a string(user input) to a int_list '''
 
-    if _str.isdigit() and len(_str) < 8:
+    if isnum:
         _int = int(_str)
         # left padded with 0 to the required length
-        hex_str = hex(_int)[2:].zfill(hex_len)
+        hex_str = hex(_int)[2:].zfill(8)
         # each sub group contains 2 character
-        hex_str_list = [hex_str[i: i+2] for i in range(0, hex_len, 2)]
+        hex_str_list = [hex_str[i: i+2] for i in range(0, 8, 2)]
         int_list = [int(i, 16) for i in hex_str_list]
     else:
         int_list = [ord(i) for i in _str]
