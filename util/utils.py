@@ -15,8 +15,11 @@ def int_list_to_int_str(int_list):
 
 def int_list_to_str(int_list):
     '''
-    convert a list of ascii codes to a string
+    convert a list of ints a string
     '''
+    if len(int_list) < 8:
+        return int_list_to_int_str(int_list)
+
     str_list = [chr(i) for i in int_list]
     _str = ''.join(str_list)
     return _str

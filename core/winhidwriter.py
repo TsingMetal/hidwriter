@@ -3,9 +3,8 @@ import time
 
 import pywinusb.hid as hid
 
-from util.utils import int_list_to_int_str, int_list_to_str
 from util.cmd_data import COUNTER_CMD
-from util.utils import str_to_int_list, verify_arg
+from util.utils import int_list_to_str
 
 
 class HIDWriter(object):
@@ -49,53 +48,18 @@ class HIDWriter(object):
         self.dev.close()
 
     def _handle_raw_data(self, data):
-        self.count = int_list_to_int_str(data[1:5]) # index 0 ignored
-        self.fixture_id = int_list_to_str(data[5:35])
-        self.maintenance_time = int_list_to_str(data[35:43])
-        self.maintenance_count = int_list_to_int_str(data[43:47])
-        self.count_limit = int_list_to_int_str(data[47:51])
+        count = int_list_to_str(data[1:5]) # index 0 ignored
+        fixture_id = int_list_to_str(data[5:35])
+        maintenance_time = int_list_to_str(data[35:43])
+        maintenance_count = int_list_to_str(data[43:47])
+        count_limit = int_list_to_str(data[47:51])
         self.basc_data = '''
 Count=%s\nFixture_ID=%s\nMaintenance_time=%s\n\
 Maintenance_count=%s\nCount_limit=%s
         ''' \
-        % (self.count, self.fixture_id, self.maintenance_time,
-                self.maintenance_count, self.count_limit)
-
-
-def main(
-        cmd='cmd',          # commands, i.e. file name
-        send_list=None,      # data sent to hid device 
-        max_len=6,          # max length of argument allowed
-        hex_len=8,          # the length of hex string
-        isnum=True          # whether only numeric allowed
-    ):
-
-    arg = \
-        verify_arg(
-                max_len=max_len,
-                cmd=cmd,
-                isnum=isnum
-        )
-    if arg == None:
-        return
-
-    # convert the arg to a list of integers
-    arg_list = str_to_int_list(arg, hex_len=hex_len)
-        
-    send_list[3: len(arg_list)+3] = arg_list
-
-    result = writer.write(send_list)
-    if result:
-        print('write OK')
-        time.sleep(0.5)
-    else:
-        print('FAILED')
-
-    writer.close()
+        % (count, fixture_id, maintenance_time,
+                maintenance_count, count_limit)
 
 
 if __name__ == '__main__':
-    import os.path
-    from util.cmd_data import INIT_COUNT_CMD
-    cmd = os.path.basename(__file__)
-    main(cmd, INIT_COUNT_CMD, 8, True)
+    pass
