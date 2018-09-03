@@ -50,7 +50,7 @@ class HIDWriter(object):
         print(data[:]) # fordebug
         print(data[34: 42]) # fordebug
         self.count = int_list_to_int_str(data[0:4]) # index 0 ignored
-        self.fixture_id = int_list_to_str(data[4:19])
+        self.fixture_id = int_list_to_str(data[4:34])
         self.maintenance_time = int_list_to_str(data[34:38])
         self.maintenance_count = int_list_to_int_str(data[42:46])
         self.count_limit = int_list_to_int_str(data[46:50])

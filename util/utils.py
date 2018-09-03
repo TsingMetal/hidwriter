@@ -50,7 +50,7 @@ e.g.: python %s %s
         _range = '0~' + '9' * max_len
         eg = '8' * max_len
     else:
-        _range = '0' * 16 + '~' +  'f' * 16
+        _range = '0' * 30 + '~' +  'z' * 30
         eg = '0123456789abcdef'
 
     help_str = help_str % (cmd, _range, cmd, eg)
