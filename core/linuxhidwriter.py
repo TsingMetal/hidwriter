@@ -51,7 +51,7 @@ class HIDWriter(object):
     def _handle_raw_data(self, data):
         count = int_list_to_str(data[0:4]) # index 0 ignored
         fixture_id = int_list_to_str(data[4:34])
-        maintenance_time = int_list_to_str(data[34:38])
+        maintenance_time = int_list_to_str(data[34:42])
         maintenance_count = int_list_to_str(data[42:46])
         count_limit = int_list_to_str(data[46:50])
         self.basc_data = '''
