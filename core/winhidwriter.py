@@ -21,17 +21,17 @@ class HIDWriter(object):
             print('Counter not FOUND!')
             sys.exit(-1)
 
+        # write for the first time to ensure following writes succed
+        self.write(COUNTER_CMD)
+
     def read(self):
         '''
         read the input from HID device
         '''
         self.dev.set_raw_data_handler(self._handle_raw_data)
         self.write(COUNTER_CMD)
-        # write twice to get the valid result(there is a 
-        # bug in the usb device)
-        self.write(COUNTER_CMD)
+
         self.basc_data = None 
-        
         for i in range(5): # wait variants to be inited
             if self.basc_data != None:
                 break
