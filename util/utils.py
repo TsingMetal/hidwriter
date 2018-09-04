@@ -22,7 +22,7 @@ def int_list_to_str(int_list):
 
     str_list = [chr(i) for i in int_list]
     _str = ''.join(str_list)
-    return _str
+    return _str.strip('\x00')
 
 def str_to_int_list(_str, isnum=True):
     ''' convert a string(user input) to a int_list '''
