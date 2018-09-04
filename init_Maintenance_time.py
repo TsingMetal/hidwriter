@@ -17,5 +17,6 @@ if __name__ == '__main__':
     write(
         cmd=os.path.basename(__file__),
         send_list=INIT_MAINTENANCE_TIME_CMD,
-        max_len=8
+        max_len=8,
+        isnum=False
     )
