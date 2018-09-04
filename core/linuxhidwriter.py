@@ -49,7 +49,7 @@ class HIDWriter(object):
         self.dev.attach_kernel_driver(0)
 
     def _handle_raw_data(self, data):
-        count = int_list_to_str(data[0:4]) # index 0 ignored
+        count = int_list_to_str(data[0:4])
         fixture_id = int_list_to_str(data[4:34])
         maintenance_time = int_list_to_str(data[34:42])
         maintenance_count = int_list_to_str(data[42:46])
