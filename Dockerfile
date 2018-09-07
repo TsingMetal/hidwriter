@@ -1,14 +1,11 @@
-FROM centos
+FROM python:2.7-slim
 
 WORKDIR /hidwriter
 
 ADD . /hidwriter
 
-RUN yum install libusb
-
-# install pip
-RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-RUN python get-pip.py
+RUN apt-get update
+RUN apt-get install libusb-1.0-0
 
 RUN pip install pyusb
 

@@ -2,4 +2,7 @@
 pywinusb
 
 # for linux
+# pyusb is depedent on libusb-1.0-0
+# for Debian-based environments: apt-get install libusb-1.0-0
+# for CentOS and red hat: yum install libusb
 pyusb
