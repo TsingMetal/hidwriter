@@ -43,8 +43,8 @@ def str_to_int_list(_str, isnum=True):
 def verify_arg(max_len=6, cmd='command', isnum=True):
 
     help_str = '''
-Usage:python %s <%s>
-e.g.: python %s %s
+Usage: %s <%s>
+e.g.:  %s %s
     ''' 
     if isnum:
         _range = '0~' + '9' * max_len
@@ -53,6 +53,7 @@ e.g.: python %s %s
         _range = '0' * 30 + '~' +  'z' * 30
         eg = '0123456789abcdef'
 
+    cmd = cmd.split('.')[0]
     help_str = help_str % (cmd, _range, cmd, eg)
 
     if len(sys.argv) != 2:
