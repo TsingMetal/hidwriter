@@ -1,6 +1,6 @@
 # 程序依赖 
 
-#＃ windows
+## windows
 > 需安装第三方python包pywinusb:
 ``` 
 pip install pywinusb
