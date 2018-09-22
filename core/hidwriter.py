@@ -63,7 +63,6 @@ def write(
     mywriter.close()
 
 
-
 if __name__ == '__main__':
     import os.path
     from util.cmd_data import INIT_COUNT_CMD
