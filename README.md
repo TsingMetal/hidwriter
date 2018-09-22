@@ -1,7 +1,7 @@
 # 程序依赖 
 
 ## windows
-> 需安装第三方python包pywinusb:
+* 需安装第三方python包pywinusb:
 ``` 
 pip install pywinusb
 ```
@@ -10,15 +10,15 @@ pip install pywinusb
 ### CentOS 
 * 安装扩展源EPEL 
 ```
-yum *y install epel*release
+yum -y install epel-release
 ``` 
 * 安装USB后端库 
 ```
-yum *y install libusb
+yum -y install libusb
 ``` 
 * 安装pip
 ```
-yum *y install python*pip
+yum -y install python-pip
 ``` 
 * 安装python库pyusb
 ```
