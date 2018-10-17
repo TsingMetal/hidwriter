@@ -18,7 +18,12 @@ class HIDWriter(object):
             if self.dev.is_kernel_driver_active(0):
                 self.dev.detach_kernel_driver(0)
         else:
-            print('Counter not found')
+            print('Counter NOT FOUND')
+            basc_data = '''
+Count=%s\nFixture_ID=%s\nMaintenance_time=%s\n\
+Maintenance_count=%s\nCount_limit=%s\nresult=0
+            ''' % ('nah', 'nah', 'nah', 'nah', 'nah')
+            open('counter.ini', 'w').write(basc_data.strip())
             sys.exit(-1)
 
         # 'unread' the invalid data
@@ -56,7 +61,7 @@ class HIDWriter(object):
         count_limit = int_list_to_str(data[46:50])
         self.basc_data = '''
 Count=%s\nFixture_ID=%s\nMaintenance_time=%s\n\
-Maintenance_count=%s\nCount_limit=%s
+Maintenance_count=%s\nCount_limit=%s\nresult=1
         ''' \
         % (count, fixture_id, maintenance_time,
                 maintenance_count, count_limit)

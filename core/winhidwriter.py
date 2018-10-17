@@ -18,7 +18,12 @@ class HIDWriter(object):
             self.dev.open()
             self.reports = self.dev.find_output_reports()
         else:
-            print('Counter not FOUND!')
+            print('Counter NOT FOUND!')
+            basc_data = '''
+Count=%s\nFixture_ID=%s\nMaintenance_time=%s\n\
+Maintenance_count=%s\nCount_limit=%s\nresult=0
+            ''' % ('nah', 'nah', 'nah', 'nah', 'nah')
+            open('counter.ini', 'w').write(basc_data.strip())
             sys.exit(-1)
 
         # write for the first time to ensure following writes succed
@@ -55,7 +60,7 @@ class HIDWriter(object):
         count_limit = int_list_to_str(data[47:51])
         self.basc_data = '''
 Count=%s\nFixture_ID=%s\nMaintenance_time=%s\n\
-Maintenance_count=%s\nCount_limit=%s
+Maintenance_count=%s\nCount_limit=%s\nresult=1
         ''' \
         % (count, fixture_id, maintenance_time,
                 maintenance_count, count_limit)
