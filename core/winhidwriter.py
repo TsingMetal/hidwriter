@@ -27,14 +27,14 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
             sys.exit(-1)
 
         # write for the first time to ensure following writes succed
-        self.write(COUNTER_CMD)
+        self.write(COUNTER_CMD[:33])
 
     def read(self):
         '''
         read the input from HID device
         '''
         self.dev.set_raw_data_handler(self._handle_raw_data)
-        self.write(COUNTER_CMD)
+        self.write(COUNTER_CMD[:33])
 
         self.basc_data = None 
         for i in range(5): # wait variants to be inited
@@ -45,7 +45,7 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
         return self.basc_data
 
     def write(self, send_list):
-        self.reports[0].set_raw_data(send_list)
+        self.reports[0].set_raw_data(send_list[:33])
         result = self.reports[0].send() 
         return result
 
