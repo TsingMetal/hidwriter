@@ -35,6 +35,8 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
         '''
         self.dev.set_raw_data_handler(self._handle_raw_data)
         self.write(COUNTER_CMD[:33])
+        print('sending data list:')
+        print(COUNTER_CMD[:33])
 
         self.basc_data = None 
         for i in range(5): # wait variants to be inited

@@ -54,6 +54,9 @@ def write(
     if 'Linux' in platform.platform():
         send_list = send_list[1:]
 
+    print('sending data list:')
+    print(send_list)
+
     result = mywriter.write(send_list)
     if result:
         print('write OK')
