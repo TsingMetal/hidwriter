@@ -53,11 +53,11 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
         self.dev.close()
 
     def _handle_raw_data(self, data):
-        count = int_list_to_str(data[1:5]) # index 0 ignored
-        fixture_id = int_list_to_str(data[5:35])
-        maintenance_time = int_list_to_str(data[35:43])
-        maintenance_count = int_list_to_str(data[43:47])
-        count_limit = int_list_to_str(data[47:51])
+        count = int_list_to_str(data[32:36]) # index 0 ignored
+        fixture_id = int_list_to_str(data[1:30])
+        maintenance_time = int_list_to_str(data[36:44])
+        maintenance_count = int_list_to_str(data[44:48])
+        count_limit = int_list_to_str(data[48:52])
         self.basc_data = '''
 Count=%s\nFixture_ID=%s\nMaintenance_time=%s\n\
 Maintenance_count=%s\nCount_limit=%s\nResult=1

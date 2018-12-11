@@ -49,7 +49,7 @@ def write(
             arg, isnum=isnum)
 
     # argument starts from index 2
-    send_list[2: len(arg_list) + 3] = arg_list
+    send_list[3: len(arg_list) + 3] = arg_list
 
     if 'Linux' in platform.platform():
         send_list = send_list[1:]
