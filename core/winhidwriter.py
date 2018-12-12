@@ -55,6 +55,10 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
         self.dev.close()
 
     def _handle_raw_data(self, data):
+        print("data received:")
+        print(data)
+        
+        """
         count = int_list_to_str(data[32:36]) # index 0 ignored
         fixture_id = int_list_to_str(data[1:30])
         maintenance_time = int_list_to_str(data[36:44])
@@ -66,6 +70,7 @@ Maintenance_count=%s\nCount_limit=%s\nResult=1
         ''' \
         % (count, fixture_id, maintenance_time,
                 maintenance_count, count_limit)
+        """
 
 
 if __name__ == '__main__':
