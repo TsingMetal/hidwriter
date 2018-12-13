@@ -9,7 +9,7 @@ from util.utils import int_list_to_str
 
 class HIDWriter(object):
 
-    def __init__(self, vid=0x0483, pid=0x5750):
+    def __init__(self, vid=0xCD12, pid=0xC001):
 
         _filter = hid.HidDeviceFilter(vendor_id=vid, product_id=pid)
         devs = _filter.get_devices()
@@ -33,10 +33,31 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
         '''
         read the input from HID device
         '''
+        prefix = [0x00, 0x1f]
+        postfix = [0x0d]
+        fixture_cmd = prefix + [0x11] * 30 + postfix
+        count_cmd = prefix + [0x12] * 30 + postfix
         self.dev.set_raw_data_handler(self._handle_raw_data)
-        self.write(COUNTER_CMD[:32] + [0x0D])
+        self.write(fixture_cmd)
+        time.sleep(1)
+        print('1 self.received_data:', self.received_data)
+        fixture_id = int_list_to_str(self.received_data[1:30])
+        print('fixture_id:', fixture_id)
+        # self.dev.set_raw_data_handler(self._handle_raw_data)
+        self.write(count_cmd)
+        time.sleep(1)
+        print('2 self.received_data:', self.received_data)
+        
+        '''
+        print('data received:')
+        print(self.data)
+        time.sleep(1)
+        print('second:', self.data)
+        print('length of data:', len(self.data))
+    
         print('sending data list:')
         print(COUNTER_CMD[:32] + [0x0D])
+        '''
 
         self.basc_data = None 
         for i in range(5): # wait variants to be inited
@@ -44,7 +65,7 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
                 break
             time.sleep(0.1)
 
-        return self.basc_data
+        return 'this is for test'
 
     def write(self, send_list):
         self.reports[0].set_raw_data(send_list[:32] + [0x0d])
@@ -55,8 +76,8 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
         self.dev.close()
 
     def _handle_raw_data(self, data):
-        print("data received:")
-        print(data)
+        self.received_data = data
+        # print(self.received_data)
         
         """
         count = int_list_to_str(data[32:36]) # index 0 ignored
