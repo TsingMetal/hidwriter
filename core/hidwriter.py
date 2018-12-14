@@ -23,7 +23,7 @@ def read():
 
 def write(
         filename='',          # commands, i.e. file name
-        cmd=[0x11],
+        cmd=0x11,
         send_list=None,     # data sent to hid device
         max_len=6,          # max length of argument allowed
         isnum=True          # whether only numeric allowed
@@ -46,7 +46,7 @@ def write(
 
     print('writing...')
     # convert the arg to a list of integers
-    arg_list = cmd + str_to_int_list(
+    arg_list = [cmd] + str_to_int_list(
             arg, isnum=isnum)
 
     '''

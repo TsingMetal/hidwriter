@@ -35,8 +35,8 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
         '''
         read the input from HID device
         '''
-        fixture_id_list = self.write(0x11)
-        rest_list = self.write(0x12)
+        fixture_id_list = self.write([0x11])
+        rest_list = self.write([0x12])
         fixture_id = int_list_to_str(fixture_id_list[3:32])
         count = int_list_to_str(rest_list[3:7])
         maintenance_time = int_list_to_str(rest_list[7:15])
@@ -55,7 +55,7 @@ Maintenance_count=%s\nCount_limit=%s\nResult=1
     def write(self, cmd):
         prefix = [0x00, 0x1f]
         postfix = [0x0d]
-        send_list = prefix + [cmd] + [0x00] * (30-len(cmd)) + postfix
+        send_list = prefix + cmd + [0x00] * (30-len(cmd)) + postfix
         self.dev.set_raw_data_handler(self._handle_raw_data)
         self.reports[0].set_raw_data(send_list)
         result = self.reports[0].send() 
