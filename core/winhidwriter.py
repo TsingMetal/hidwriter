@@ -28,6 +28,7 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
 
         # write for the first time to ensure following writes succed
         self.write(COUNTER_CMD[:32] + [0x0D])
+        time.sleep(1)
 
     def read(self):
         '''
@@ -35,18 +36,27 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
         '''
         prefix = [0x00, 0x1f]
         postfix = [0x0d]
-        fixture_cmd = prefix + [0x11] * 30 + postfix
-        count_cmd = prefix + [0x12] * 30 + postfix
+        fixture_cmd = prefix + [0x11] + [0x00] * 29 + postfix
+        count_cmd = prefix + [0x12] + [0x00] * 29 + postfix
         self.dev.set_raw_data_handler(self._handle_raw_data)
         self.write(fixture_cmd)
         time.sleep(1)
-        print('1 self.received_data:', self.received_data)
-        fixture_id = int_list_to_str(self.received_data[1:30])
-        print('fixture_id:', fixture_id)
+        # print('1 self.received_data:', self.received_data)
+        fixture_id = int_list_to_str(self.received_data[3:32])
         # self.dev.set_raw_data_handler(self._handle_raw_data)
         self.write(count_cmd)
         time.sleep(1)
-        print('2 self.received_data:', self.received_data)
+        # print('2 self.received_data:', self.received_data)
+        count = int_list_to_str(self.received_data[3:7])
+        maintenance_time = int_list_to_str(self.received_data[7:15])
+        maintenance_count = int_list_to_str(self.received_data[15:19])
+        count_limit = int_list_to_str(self.received_data[19:23])
+        print('count: %s' % count)
+        print('fixture_id:', fixture_id)
+        print('maintenance_time: %s' % maintenance_time)
+        print('maintenance_count: %s' % maintenance_count)
+        print('count_limit: %s' % count_limit)
+        
         
         '''
         print('data received:')
