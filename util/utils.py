@@ -53,7 +53,7 @@ e.g.:  python %s %s
         _range = '0' * 30 + '~' +  'z' * 30
         eg = '0123456789abcdef'
 
-    help_str = help_str % (cmd, _range, cmd, eg)
+    help_str = help_str % (filename, _range, filename, eg)
 
     if len(sys.argv) != 2:
         print('ONE ARGUMENT NEEDED!')

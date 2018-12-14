@@ -26,7 +26,9 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
             sys.exit(-1)
 
         # write for the first time to ensure following writes succed
-        self.write([0x00, 0x1f, 0x11] + [0x00] * 29 + [0x0D])
+        send_list = [0x00, 0x1f, 0x11] + [0x00] * 29 + [0x0d]
+        self.reports[0].set_raw_data(send_list)
+        result = self.reports[0].send() 
         time.sleep(1)
 
     def read(self):
@@ -54,7 +56,6 @@ Maintenance_count=%s\nCount_limit=%s\nResult=1
         ''' \
         % (count, fixture_id, maintenance_time,
                 maintenance_count, count_limit)
-        print(basc_data)
 
         return basc_data
 
@@ -67,11 +68,11 @@ Maintenance_count=%s\nCount_limit=%s\nResult=1
         result = self.reports[0].send() 
         self.received_data = None
         for i in range(5):
-            if self.received_data != None and
+            if self.received_data != None:
                 break
             time.sleep(0.1)
-        if self.received_data = None or \
-                self.received_data[2] != cmd or \
+        if not self.received_data or \
+                self.received_data[2] != cmd[0] or \
                 self.received_data[-1] != 0x50:
             print('write FAIL')
 
