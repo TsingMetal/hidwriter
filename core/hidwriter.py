@@ -22,7 +22,8 @@ def read():
     mywriter.close()
 
 def write(
-        cmd='cmd',          # commands, i.e. file name
+        filename='',          # commands, i.e. file name
+        cmd=[0x11],
         send_list=None,     # data sent to hid device
         max_len=6,          # max length of argument allowed
         isnum=True          # whether only numeric allowed
@@ -32,7 +33,7 @@ def write(
     arg = \
         verify_arg(
                 max_len=max_len,
-                cmd=cmd,
+                filename=filename,
                 isnum=isnum
         )
     if arg == None:
@@ -45,19 +46,21 @@ def write(
 
     print('writing...')
     # convert the arg to a list of integers
-    arg_list = str_to_int_list(
+    arg_list = cmd + str_to_int_list(
             arg, isnum=isnum)
 
+    '''
     # argument starts from index 2
     send_list[3: len(arg_list) + 3] = arg_list
 
     if 'Linux' in platform.platform():
         send_list = send_list[1:]
+    '''
 
     print('sending data list:')
     print(send_list)
 
-    result = mywriter.write(send_list)
+    result = mywriter.write(arg_list)
     if result:
         print('write OK')
     else:
@@ -67,6 +70,7 @@ def write(
 
 
 if __name__ == '__main__':
+    '''
     import os.path
     from util.cmd_data import INIT_COUNT_CMD
 
@@ -74,3 +78,4 @@ if __name__ == '__main__':
 
     cmd = os.path.basename(__file__)
     mywriter.write(cmd, INIT_COUNT_CMD, 6, 8, True)
+    '''

@@ -40,7 +40,7 @@ def str_to_int_list(_str, isnum=True):
     return int_list
 
 
-def verify_arg(max_len=6, cmd='command', isnum=True):
+def verify_arg(max_len=6, filename='command', isnum=True):
 
     help_str = '''
 Usage: python %s <%s>
