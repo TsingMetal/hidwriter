@@ -6,7 +6,8 @@ from core.hidwriter import write
 
 
 if __name__ == '__main__':
+    INIT_MAINTENANCE_COUNT_CMD = 0x24
     write(
-        cmd=os.path.basename(__file__),
-        send_list=INIT_MAINTENANCE_COUNT_CMD,
+        filename=os.path.basename(__file__),
+        cmd=INIT_MAINTENANCE_COUNT_CMD,
     )
