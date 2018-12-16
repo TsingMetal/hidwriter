@@ -25,6 +25,8 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
             open('counter.ini', 'w').write(basc_data.strip())
             sys.exit(-1)
 
+        self.write_status = []
+
         # write for the first time to ensure following writes succed
         send_list = [0x00, 0x1f, 0x11] + [0x00] * 29 + [0x0d]
         self.reports[0].set_raw_data(send_list)
@@ -45,10 +47,11 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
 
         basc_data = '''
 Count=%s\nFixture_ID=%s\nMaintenance_time=%s\n\
-Maintenance_count=%s\nCount_limit=%s\nResult=1
+Maintenance_count=%s\nCount_limit=%s\nResult=%d
         ''' \
         % (count, fixture_id, maintenance_time,
-                maintenance_count, count_limit)
+                maintenance_count, count_limit,
+                min(self.write_status))
 
         return basc_data
 
@@ -67,7 +70,11 @@ Maintenance_count=%s\nCount_limit=%s\nResult=1
         if not self.received_data or \
                 self.received_data[2] != cmd[0] or \
                 self.received_data[-1] != 0x50:
-            print('write FAIL')
+            self.write_status.append(0)
+            print(hex(cmd[0] + ' write FAIL')
+        else:
+            self.write_status.append(1)
+            print(hex(cmd[0]) + ' write OK')
 
         return self.received_data
 

@@ -47,12 +47,7 @@ def write(
     # convert the arg to a list of integers
     arg_list = [cmd] + str_to_int_list(
             arg, isnum=isnum)
-
-    result = mywriter.write(arg_list)
-    if result:
-        print('write OK')
-    else:
-        print('write FAILED!')
+    mywriter.write(arg_list)
 
     mywriter.close()
 

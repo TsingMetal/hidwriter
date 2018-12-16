@@ -40,12 +40,14 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
         maintenance_count = int_list_to_str(rest_list[14:18])
         count_limit = int_list_to_str(rest_list[18:22])
 
+        self.write_status = []
         basc_data = '''
 Count=%s\nFixture_ID=%s\nMaintenance_time=%s\n\
-Maintenance_count=%s\nCount_limit=%s\nResult=1
+Maintenance_count=%s\nCount_limit=%s\nResult=%d
         ''' \
         % (count, fixture_id, maintenance_time,
-                maintenance_count, count_limit)
+                maintenance_count, count_limit,
+                min(self.write_status))
 
         return basc_data
     
@@ -59,12 +61,15 @@ Maintenance_count=%s\nCount_limit=%s\nResult=1
         if not received_data or \
                 received_data[1] != cmd[0] or \
                 received_data[-1] != 0x50:
-            print('write FAIL')
+            self.write_status.append(0)
+            print(hex(cmd[0]) + ' write FAIL')
+        else:
+            self.write_status.append(1)
+            print(hex(cmd[0]) + ' write OK')
 
         return received_data
 
     def close(self):
-        ''' not implemented '''
         usb.util.release_interface(self.dev, 0)
         self.dev.attach_kernel_driver(0)
 
