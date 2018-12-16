@@ -24,7 +24,6 @@ def read():
 def write(
         filename='',          # commands, i.e. file name
         cmd=0x11,
-        send_list=None,     # data sent to hid device
         max_len=6,          # max length of argument allowed
         isnum=True          # whether only numeric allowed
     ):
@@ -48,17 +47,6 @@ def write(
     # convert the arg to a list of integers
     arg_list = [cmd] + str_to_int_list(
             arg, isnum=isnum)
-
-    '''
-    # argument starts from index 2
-    send_list[3: len(arg_list) + 3] = arg_list
-
-    if 'Linux' in platform.platform():
-        send_list = send_list[1:]
-    '''
-
-    print('sending data list:')
-    print(send_list)
 
     result = mywriter.write(arg_list)
     if result:
