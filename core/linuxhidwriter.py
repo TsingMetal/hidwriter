@@ -2,13 +2,12 @@ import sys
 
 import usb
 
-from util.cmd_data import COUNTER_CMD
 from util.utils import int_list_to_str
 
 
 class HIDWriter(object):
 
-    def __init__(self, vid=0x0483, pid=0x5750):
+    def __init__(self, vid=0xcd12, pid=0xc001):
 
         self.dev = usb.core.find(idVendor=vid, idProduct=pid)
         if self.dev != None:
@@ -27,46 +26,47 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
             sys.exit(-1)
 
         # 'unread' the invalid data
-        self.dev.write(self.ep_out, COUNTER_CMD[1: 33], timeout=5000)
+        send_list = [0x1f, 0x11] + [0x00] * 29 + [0x0d]
+        self.dev.write(self.ep_out, send_list, timeout=5000)
         self.dev.read(self.ep_in, 32, timeout=3000)
 
     def read(self):
 
-        self.dev.write(self.ep_out, COUNTER_CMD[1:33], timeout=5000)
-        data = self.dev.read(self.ep_in, 32, timeout=3000)
-        try:
-            data_list = data.tolist()
-            basc_data = self._handle_raw_data(data_list)
-            return basc_data
-        except Exception as e:
-            print(e)
-            print("read data failed!")
-            sys.exit(-1)
-    
-    def write(self, send_list):
-        bytes_num = self.dev.write(self.ep_out, send_list, timeout=5000)
-        # self.dev.read(self.ep_in, 64, timeout=3000)
-        return bytes_num
+        fixture_id_list = self.write([0x11])
+        rest_list = self.write([0x12])
+        fixture_id = int_list_to_str(fixture_id_list[2:31])
+        count = int_list_to_str(rest_list[2:6])
+        maintenance_time = int_list_to_str(rest_list[6:14])
+        maintenance_count = int_list_to_str(rest_list[14:18])
+        count_limit = int_list_to_str(rest_list[18:22])
 
-    def close(self):
-        ''' not implemented '''
-        usb.util.release_interface(self.dev, 0)
-        self.dev.attach_kernel_driver(0)
-
-    def _handle_raw_data(self, data):
-        count = int_list_to_str(data[32:36])
-        fixture_id = int_list_to_str(data[1:30])
-        maintenance_time = int_list_to_str(data[36:44])
-        maintenance_count = int_list_to_str(data[44:48])
-        count_limit = int_list_to_str(data[48:52])
-        self.basc_data = '''
+        basc_data = '''
 Count=%s\nFixture_ID=%s\nMaintenance_time=%s\n\
 Maintenance_count=%s\nCount_limit=%s\nResult=1
         ''' \
         % (count, fixture_id, maintenance_time,
                 maintenance_count, count_limit)
 
-        return self.basc_data
+        return basc_data
+    
+    def write(self, cmd):
+        prefix = [0x1f]
+        postfix = [0x0d]
+        send_list = prefix + cmd + [0x00] * (30-len(cmd)) + postfix
+        bytes_num = self.dev.write(self.ep_out, send_list, timeout=5000)
+        received_data = self.dev.read(self.ep_in, 32, timeout=3000)
+        received_data = received_data.tolist()
+        if not received_data or \
+                received_data[1] != cmd[0] or \
+                received_data[-1] != 0x50:
+            print('write FAIL')
+
+        return received_data
+
+    def close(self):
+        ''' not implemented '''
+        usb.util.release_interface(self.dev, 0)
+        self.dev.attach_kernel_driver(0)
 
 
 if __name__ == '__main__':
