@@ -71,7 +71,7 @@ Maintenance_count=%s\nCount_limit=%s\nResult=%d
                 self.received_data[2] != cmd[0] or \
                 self.received_data[-1] != 0x50:
             self.write_status.append(0)
-            print(hex(cmd[0] + ' write FAIL'))
+            print(hex(cmd[0]) + ' write FAIL')
         else:
             self.write_status.append(1)
             print(hex(cmd[0]) + ' write OK')
