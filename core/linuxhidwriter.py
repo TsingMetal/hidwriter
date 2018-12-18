@@ -25,6 +25,8 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
             open('counter.ini', 'w').write(basc_data.strip())
             sys.exit(-1)
 
+        self.write_status = []
+
         # 'unread' the invalid data
         send_list = [0x1f, 0x11] + [0x00] * 29 + [0x0d]
         self.dev.write(self.ep_out, send_list, timeout=5000)
@@ -40,7 +42,6 @@ Maintenance_count=%s\nCount_limit=%s\nResult=0
         maintenance_count = int_list_to_str(rest_list[14:18])
         count_limit = int_list_to_str(rest_list[18:22])
 
-        self.write_status = []
         basc_data = '''
 Count=%s\nFixture_ID=%s\nMaintenance_time=%s\n\
 Maintenance_count=%s\nCount_limit=%s\nResult=%d
